@@ -1,0 +1,591 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Ombala API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.useombala.ao"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Mensagens"
+    },
+    {
+      "name": "Remetentes"
+    },
+    {
+      "name": "Créditos"
+    }
+  ],
+  "paths": {
+    "/v1/messages": {
+      "post": {
+        "tags": [
+          "Mensagens"
+        ],
+        "summary": "Enviar Mensagem",
+        "description": "Permite enviar uma SMS para um ou mais números de telefone.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "message",
+                  "from",
+                  "to"
+                ],
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Texto da mensagem",
+                    "required": true
+                  },
+                  "from": {
+                    "type": "string",
+                    "description": "Remetente da mensagem, deve estar previamente criado e aprovado.",
+                    "required": true
+                  },
+                  "to": {
+                    "type": "string",
+                    "description": "Lista de número(s) destinatário(s) da mensagem",
+                    "required": true
+                  },
+                  "schedule": {
+                    "type": "string",
+                    "description": "Data e hora para o envio da SMS, no formato yyyyMMddHHmmss, ideal para agendar o envio de uma SMS, não é um parâmetro obrigatório.",
+                    "format": "date-time",
+                    "required": false
+                  }
+                },
+                "example": {
+                  "message": "Mensagem de teste.",
+                  "from": "MINHALOJA",
+                  "to": "921939411",
+                  "schedule": "20231015182000"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "description": "Token de autorização disponível no Portal Ombala"
+            },
+            "example": "Token a9eb6ea6-5777-4848-a9ed-8cbffc74a503"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "description": "Formato do conteúdo do pedido, formato application/json, obrigatório."
+            },
+            "example": "application/json"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Mensagem enviada com sucesso",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "4XX": {
+            "description": "Houve um problema no pedido. Haverá uma descrição clara da causa do do erro.",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Mensagens"
+        ],
+        "summary": "Listar Mensagens",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "description": "Token de autorização disponível no Portal Ombala"
+            },
+            "example": "Token a9eb6ea6-5777-4848-a9ed-8cbffc74a503"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "description": "As mensagens serão retornadas em diversas páginas, pode requisitar uma página especifica por esse parâmentro, ele não é obrigatório."
+            },
+            "example": "0"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pedido Realizado com sucesso",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/v1/messages/{message_id}": {
+      "delete": {
+        "tags": [
+          "Mensagens"
+        ],
+        "summary": "Delete",
+        "description": "Apagar o registro de envio de uma SMS",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "description": "Token de autorização disponível no Portal Ombala"
+            },
+            "example": "Token a9eb6ea6-5777-4848-a9ed-8cbffc74a503"
+          },
+          {
+            "name": "message_id",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "description": "ID da mensagem"
+            },
+            "example": "b9eb6ea6-5117-4848-a9ed-8cbffc74a991"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Pedido Realizado com sucesso",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/v1/messages/recipients": {
+      "get": {
+        "tags": [
+          "Mensagens"
+        ],
+        "summary": "Listar destinatários",
+        "description": "Listar todos os números que já foram alvo de uma SMS através da sua conta",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "description": "Token de autorização disponível no Portal Ombala"
+            },
+            "example": "Token a9eb6ea6-5777-4848-a9ed-8cbffc74a503"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "description": "As mensagens serão retornadas em diversas páginas, pode requisitar uma página especifica por esse parâmentro, ele não é obrigatório."
+            },
+            "example": "1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pedido Realizado com sucesso",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/v1/messages/date": {
+      "get": {
+        "tags": [
+          "Mensagens"
+        ],
+        "summary": "Listar Mensagens Intervalo de datas",
+        "description": "Listar todas as mensagens envidas dentro de um intervalo de datas",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "description": "Token de autorização disponível no Portal Ombala"
+            },
+            "example": "Token a9eb6ea6-5777-4848-a9ed-8cbffc74a503"
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "description": "Data de início da consulta, no formato YYYYMMDD",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": "20231011"
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "description": "Data de fim da consulta, no formato YYYYMMDD",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": "20231020"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "description": "As mensagens serão retornadas em diversas páginas, pode requisitar uma página especifica por esse parâmentro, ele não é obrigatório."
+            },
+            "example": "1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pedido Realizado com sucesso",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/v1/messages/recipient": {
+      "get": {
+        "tags": [
+          "Mensagens"
+        ],
+        "summary": "Listas de mensagens de um número/destinatário",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "description": "Token de autorização disponível no Portal Ombala"
+            },
+            "example": "Token a9eb6ea6-5777-4848-a9ed-8cbffc74a503"
+          },
+          {
+            "name": "phone_number",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "example": "921939455"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "description": "Os resultados serão retornadas em diversas páginas, pode requisitar uma página especifica por esse parâmentro, ele não é obrigatório."
+            },
+            "example": "0"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pedido Realizado com sucesso",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/v1/messages/one": {
+      "get": {
+        "tags": [
+          "Mensagens"
+        ],
+        "summary": "Mostrar mensagem pelo ID mensagem",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "description": "Token de autorização disponível no Portal Ombala"
+            },
+            "example": "Token a9eb6ea6-5777-4848-a9ed-8cbffc74a503"
+          },
+          {
+            "name": "message_id",
+            "in": "query",
+            "description": "ID da Mensagem",
+            "schema": {
+              "type": "string"
+            },
+            "example": "545b6ca5-a481-4abe-b3b9-ce1e8a4b3629"
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "description": "ID do número de destino da SMS no contexto de uma mensagem",
+            "schema": {
+              "type": "string"
+            },
+            "example": "545b6ca5-a481-4abe-b3b9-ce1e8a4b3629"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pedido Realizado com sucesso",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/v1/senders/": {
+      "post": {
+        "tags": [
+          "Remetentes"
+        ],
+        "summary": "Criar Remetente",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Nome do remente da SMS",
+                    "required": true
+                  }
+                },
+                "example": {
+                  "name": "LOJAHEBER"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "description": "Token de autorização disponível no Portal Ombala"
+            },
+            "example": "Token a9eb6ea6-5777-4848-a9ed-8cbffc74a503"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "description": "Formato do conteúdo do pedido, formato application/json, obrigatório."
+            },
+            "example": "application/json"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Pedido Realizado com sucesso",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/v1/senders": {
+      "get": {
+        "tags": [
+          "Remetentes"
+        ],
+        "summary": "Listar Remetentes",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "description": "Token de autorização disponível no Portal Ombala"
+            },
+            "example": "Token a9eb6ea6-5777-4848-a9ed-8cbffc74a503"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pedido Realizado com sucesso",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/v1/senders/approved": {
+      "get": {
+        "tags": [
+          "Remetentes"
+        ],
+        "summary": "Listar Remetentes Aprovados",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "description": "Token de autorização disponível no Portal Ombala"
+            },
+            "example": "Token a9eb6ea6-5777-4848-a9ed-8cbffc74a503"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pedido Realizado com sucesso",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/v1/senders/pending": {
+      "get": {
+        "tags": [
+          "Remetentes"
+        ],
+        "summary": "Listar Remetentes Pendentes de Aprovação",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "description": "Token de autorização disponível no Portal Ombala"
+            },
+            "example": "Token a9eb6ea6-5777-4848-a9ed-8cbffc74a503"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pedido Realizado com sucesso",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/v1/senders/{sender_id}": {
+      "delete": {
+        "tags": [
+          "Remetentes"
+        ],
+        "summary": "Delete",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "description": "Token de autorização disponível no Portal Ombala"
+            },
+            "example": "Token a9eb6ea6-5777-4848-a9ed-8cbffc74a503"
+          },
+          {
+            "name": "sender_id",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "description": "ID do Remetente"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Pedido Realizado com sucesso",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/v1/credits": {
+      "get": {
+        "tags": [
+          "Créditos"
+        ],
+        "summary": "Mostrar Saldo/Créditos de SMS",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "description": "Token de autorização disponível no Portal Ombala"
+            },
+            "example": "Token a9eb6ea6-5777-4848-a9ed-8cbffc74a503"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pedido Realizado com sucesso",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/v1/recharges": {
+      "get": {
+        "tags": [
+          "Créditos"
+        ],
+        "summary": "Mostar Histórico de Carregamentos",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "description": "Token de autorização disponível no Portal Ombala"
+            },
+            "example": "Token a9eb6ea6-5777-4848-a9ed-8cbffc74a503"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pedido Realizado com sucesso",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {}
+}
