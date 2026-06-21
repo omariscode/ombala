@@ -29,24 +29,6 @@ client.messages.list(page=1)
 client.credits.balance()
 ```
 
-### Modo assíncrono
-
-```python
-import asyncio
-from ombala import AsyncOmbala
-
-async def main():
-    async with AsyncOmbala("Token ...") as client:
-        resp = await client.messages.send(
-            message="Olá, tudo bem?",
-            from_="MINHALOJA",
-            to="921939411",
-        )
-        print(resp)
-
-asyncio.run(main())
-```
-
 ## API
 
 ### Mensagens
