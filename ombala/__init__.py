@@ -1,3 +1,3 @@
-from ombala.client import Ombala, AsyncOmbala
+from ombala.client import Ombala
 
-__all__ = ["Ombala", "AsyncOmbala"]
+__all__ = ["Ombala"]

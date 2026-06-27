@@ -5,11 +5,11 @@ from typing import TYPE_CHECKING, Any
 from ombala.models import SendSMSRequest
 
 if TYPE_CHECKING:
-    from ombala.client import Ombala, AsyncOmbala
+    from ombala.client import Ombala
 
 
 class MessagesResource:
-    def __init__(self, client: Ombala | AsyncOmbala) -> None:
+    def __init__(self, client: Ombala) -> None:
         self._client = client
 
     def send(self, message: str, from_: str,to: str, schedule: str | None = None) -> dict[str, Any]:

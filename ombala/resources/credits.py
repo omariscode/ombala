@@ -3,11 +3,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from ombala.client import Ombala, AsyncOmbala
+    from ombala.client import Ombala
 
 
 class CreditsResource:
-    def __init__(self, client: Ombala | AsyncOmbala) -> None:
+    def __init__(self, client: Ombala) -> None:
         self._client = client
 
     def balance(self) -> dict[str, Any]:
